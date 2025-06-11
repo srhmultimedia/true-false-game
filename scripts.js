@@ -294,7 +294,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         const data = encodeURIComponent(JSON.stringify(workbookData));
-        const scriptId = 'AKfycbzX3rMsL9BgMpnW0JxmuaEKkpdN74OY6S0fXhHmNsS9xLICORu1_S0Pdcb0jLumgC9ILg';
+        const scriptId = 'AAKfycbxXan7mAFhi59xR0z3camYgRD-eu4xSZERWorEsErtfCeytSnkfYKd_Z0fuD5hHwissxg';
 
         const url = `https://script.google.com/macros/s/${scriptId}/exec?data=${data}`;
 
