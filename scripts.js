@@ -296,7 +296,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const data = encodeURIComponent(JSON.stringify(workbookData));
 
         // URL real de tu Apps Script
-        const appsScriptUrl = `https://script.google.com/macros/s/AKfycbygQ7PVVm-UL-xjeiDv_nkIchLpbE-YkFzuwcLAvQnIkpJDKRF1krFQu88uhXQ-ISOqcg/exec?data=${data}`;
+        const appsScriptUrl = `https://script.google.com/macros/s/AKfycbwvpyrC3rVJzrXPOWRlVA8PN0Gx-DAhkj1sat1nHbOpB6B0ZfBeVXMNrImefMZIZvt1IA/exec?data=${data}`;
 
         // CORS proxy
         const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(appsScriptUrl)}`;
@@ -304,11 +304,10 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch(proxyUrl)
             .then(res => res.text())
             .then(text => {
-                alert("✅ Datos enviados: " + text);
+                console.info("✅" + text);
             })
             .catch(err => {
                 console.error("❌ Error en fetch:", err);
-                alert("❌ Error al enviar los datos");
             });
     }
 
