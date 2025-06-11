@@ -1,0 +1,305 @@
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego Verdadero o Falso - Mínimos y Máximos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet">
+    <link href="./styles.css" rel="stylesheet">
+</head>
+
+<body class="p-4" sandbox="allow-downloads">
+    <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Verdadero o Falso</h1>
+            <p class="text-lg text-gray-600">Conceptos de Mínimos y Máximos en Finanzas</p>
+        </header>
+
+        <!-- Game Container -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <!-- Game Controls -->
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <div class="relative h-16 w-16 mr-4">
+                        <svg class="w-full h-full" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="#e5e7eb" stroke-width="8"></circle>
+                            <circle id="timer-circle" class="timer-circle" cx="50" cy="50" r="45" fill="none"
+                                stroke="#4f46e5" stroke-width="8" stroke-dashoffset="0" style="stroke-dashoffset: 0;">
+                            </circle>
+                        </svg>
+                        <span id="countdown"
+                            class="absolute inset-0 flex items-center justify-center text-xl font-bold text-gray-800">3</span>
+                    </div>
+                    <div>
+                        <h2 id="question-number" class="text-xl font-semibold text-gray-700">Pregunta 1 de 15</h2>
+                        <p class="text-sm text-gray-500">Levanta tu tarjeta cuando termine la cuenta regresiva</p>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <!-- 10-minute session timer -->
+                    <div class="relative h-16 w-16 mr-4">
+                        <svg class="w-full h-full" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="#e5e7eb" stroke-width="8"></circle>
+                            <circle id="session-timer-circle" class="session-timer-circle" cx="50" cy="50" r="45"
+                                fill="none" stroke="#ef4444" stroke-width="8" stroke-dashoffset="0"
+                                style="stroke-dashoffset: 147.16;"></circle>
+                        </svg>
+                        <span id="session-countdown"
+                            class="absolute inset-0 flex items-center justify-center text-lg font-bold text-gray-800">04:48</span>
+                    </div>
+                    <div class="flex space-x-4">
+                        <button id="prev-btn"
+                            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition disabled:opacity-50"
+                            disabled="">Anterior</button>
+                        <button id="next-btn"
+                            class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">Siguiente</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statement Card -->
+            <div class="relative h-48 md:h-64 mb-8">
+                <div id="statement-card" class="card-flip w-full h-full flipped">
+                    <div class="card-front bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6">
+                        <p id="statement-text" class="text-xl md:text-2xl font-medium text-center">El mes con el mayor
+                            ingreso asegura automáticamente el mejor resultado financiero.</p>
+                    </div>
+                    <div class="card-back bg-gradient-to-r from-emerald-500 to-teal-600 text-white p-6">
+                        <div class="text-center">
+                            <p id="answer-text" class="text-xl md:text-2xl font-medium mb-4">FALSO</p>
+                            <p id="explanation-text" class="text-md md:text-lg">Un mayor ingreso no garantiza mejores
+                                resultados si los gastos también aumentan proporcionalmente o más.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Voting Area -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="bg-green-50 rounded-lg p-6 border-2 border-green-200">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-semibold text-green-800">VERDADERO</h3>
+                        <span id="true-count" class="text-2xl font-bold text-green-600">1</span>
+                    </div>
+                    <div class="flex justify-center">
+                        <button id="true-btn"
+                            class="w-32 h-32 rounded-full bg-green-500 text-white text-4xl font-bold shadow-lg hover:bg-green-600 transition transform hover:scale-105">V</button>
+                    </div>
+                </div>
+                <div class="bg-red-50 rounded-lg p-6 border-2 border-red-200">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-semibold text-red-800">FALSO</h3>
+                        <span id="false-count" class="text-2xl font-bold text-red-600">0</span>
+                    </div>
+                    <div class="flex justify-center">
+                        <button id="false-btn"
+                            class="w-32 h-32 rounded-full bg-red-500 text-white text-4xl font-bold shadow-lg hover:bg-red-600 transition transform hover:scale-105">F</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800">Resultados</h3>
+                    <div class="flex space-x-2">
+                        <button id="export-btn"
+                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
+                            Exportar a Excel
+                        </button>
+                        <!-- Toggle Answers button removed as requested -->
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white">
+                        <thead>
+                            <tr>
+                                <th
+                                    class="py-2 px-4 border-b border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Pregunta</th>
+                                <th
+                                    class="py-2 px-4 border-b border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Verdadero</th>
+                                <th
+                                    class="py-2 px-4 border-b border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Falso</th>
+                                <th id="answer-column-header"
+                                    class="py-2 px-4 border-b border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider hidden">
+                                    Respuesta</th>
+                            </tr>
+                        </thead>
+                        <tbody id="results-table">
+                            <tr class="bg-blue-50">
+                                <td class="py-2 px-4 border-b border-gray-200 text-sm">1. El mes con el mayor ingreso
+                                    asegura automáticament...</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">1</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td
+                                    class="py-2 px-4 border-b border-gray-200 text-center text-sm font-medium hidden text-red-600">
+                                    F</td>
+                            </tr>
+                            <tr class="">
+                                <td class="py-2 px-4 border-b border-gray-200 text-sm">2. Un gasto mínimo no siempre
+                                    significa que haya habi...</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td
+                                    class="py-2 px-4 border-b border-gray-200 text-center text-sm font-medium hidden text-green-600">
+                                    V</td>
+                            </tr>
+                            <tr class="">
+                                <td class="py-2 px-4 border-b border-gray-200 text-sm">3. Si el porcentaje de
+                                    desperdicio es el más bajo, el...</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td
+                                    class="py-2 px-4 border-b border-gray-200 text-center text-sm font-medium hidden text-red-600">
+                                    F</td>
+                            </tr>
+                            <tr class="">
+                                <td class="py-2 px-4 border-b border-gray-200 text-sm">4. El promedio mensual siempre
+                                    está a medio camino ex...</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td
+                                    class="py-2 px-4 border-b border-gray-200 text-center text-sm font-medium hidden text-red-600">
+                                    F</td>
+                            </tr>
+                            <tr class="">
+                                <td class="py-2 px-4 border-b border-gray-200 text-sm">5. Tener un máximo histórico en
+                                    ingresos puede acompa...</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td
+                                    class="py-2 px-4 border-b border-gray-200 text-center text-sm font-medium hidden text-green-600">
+                                    V</td>
+                            </tr>
+                            <tr class="">
+                                <td class="py-2 px-4 border-b border-gray-200 text-sm">6. El mes con el valor mínimo en
+                                    ahorros indica falta...</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td
+                                    class="py-2 px-4 border-b border-gray-200 text-center text-sm font-medium hidden text-red-600">
+                                    F</td>
+                            </tr>
+                            <tr class="">
+                                <td class="py-2 px-4 border-b border-gray-200 text-sm">7. Reducir el desperdicio en un
+                                    2% puede ser más rent...</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td
+                                    class="py-2 px-4 border-b border-gray-200 text-center text-sm font-medium hidden text-green-600">
+                                    V</td>
+                            </tr>
+                            <tr class="">
+                                <td class="py-2 px-4 border-b border-gray-200 text-sm">8. El valor máximo de cualquier
+                                    rubro es más importan...</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td
+                                    class="py-2 px-4 border-b border-gray-200 text-center text-sm font-medium hidden text-red-600">
+                                    F</td>
+                            </tr>
+                            <tr class="">
+                                <td class="py-2 px-4 border-b border-gray-200 text-sm">9. Dos meses pueden compartir el
+                                    mismo máximo, pero d...</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td
+                                    class="py-2 px-4 border-b border-gray-200 text-center text-sm font-medium hidden text-green-600">
+                                    V</td>
+                            </tr>
+                            <tr class="">
+                                <td class="py-2 px-4 border-b border-gray-200 text-sm">10. Cuando todos los datos están
+                                    muy cerca del promedi...</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td
+                                    class="py-2 px-4 border-b border-gray-200 text-center text-sm font-medium hidden text-green-600">
+                                    V</td>
+                            </tr>
+                            <tr class="">
+                                <td class="py-2 px-4 border-b border-gray-200 text-sm">11. El KPI verde (desperdicio)
+                                    puede convertir un mes ...</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td
+                                    class="py-2 px-4 border-b border-gray-200 text-center text-sm font-medium hidden text-green-600">
+                                    V</td>
+                            </tr>
+                            <tr class="">
+                                <td class="py-2 px-4 border-b border-gray-200 text-sm">12. Un máximo en ingresos y un
+                                    máximo en porcentaje de...</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td
+                                    class="py-2 px-4 border-b border-gray-200 text-center text-sm font-medium hidden text-red-600">
+                                    F</td>
+                            </tr>
+                            <tr class="">
+                                <td class="py-2 px-4 border-b border-gray-200 text-sm">13. Un mínimo en gastos logra más
+                                    impacto si coincide ...</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td
+                                    class="py-2 px-4 border-b border-gray-200 text-center text-sm font-medium hidden text-red-600">
+                                    F</td>
+                            </tr>
+                            <tr class="">
+                                <td class="py-2 px-4 border-b border-gray-200 text-sm">14. El promedio no cuenta toda la
+                                    historia; los extrem...</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td
+                                    class="py-2 px-4 border-b border-gray-200 text-center text-sm font-medium hidden text-green-600">
+                                    V</td>
+                            </tr>
+                            <tr class="">
+                                <td class="py-2 px-4 border-b border-gray-200 text-sm">15. Para evaluar decisiones, es
+                                    vital comparar máximos...</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center text-sm">0</td>
+                                <td
+                                    class="py-2 px-4 border-b border-gray-200 text-center text-sm font-medium hidden text-green-600">
+                                    V</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Time's Up Modal -->
+        <div id="times-up-modal"
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-xl p-8 max-w-md w-full text-center">
+                <div class="text-5xl mb-4">⏰</div>
+                <h2 class="text-2xl font-bold text-red-600 mb-4">¡Tiempo Agotado!</h2>
+                <p class="text-gray-700 mb-6">Han pasado los 10 minutos asignados para esta actividad.</p>
+                <button id="close-modal-btn"
+                    class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Continuar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="./scripts.js"></script>
+    <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'94dd26bcb3b3323d',t:'MTc0OTYwMzQxNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
+    <iframe height="1" width="1"
+        style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe>
+    <iframe height="1" width="1"
+        style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe>
+
+
+
+</body>
+
+</html>
