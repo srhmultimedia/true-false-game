@@ -294,18 +294,21 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         const data = encodeURIComponent(JSON.stringify(workbookData));
-        const scriptId = 'AKfycbxj4agaj2RGr7E9HUtC2yDZ1vKXt1QWmDmlcl5HkkzhkI-j17ucI_VEToTGQp251PIyhw';
 
-        const url = `https://script.google.com/macros/s/${scriptId}/exec?data=${data}`;
+        // URL real de tu Apps Script
+        const appsScriptUrl = `https://script.google.com/macros/s/AKfycbxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/exec?data=${data}`;
 
-        fetch(url)
-            .then(response => response.text())
-            .then(result => {
-                alert("✅ Resultados enviados a Google Sheets correctamente");
+        // CORS proxy
+        const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(appsScriptUrl)}`;
+
+        fetch(proxyUrl)
+            .then(res => res.text())
+            .then(text => {
+                alert("✅ Datos enviados: " + text);
             })
-            .catch(error => {
-                console.error("❌ Error al enviar datos:", error);
-                alert("Hubo un error al enviar los datos");
+            .catch(err => {
+                console.error("❌ Error en fetch:", err);
+                alert("❌ Error al enviar los datos");
             });
     }
 
