@@ -296,7 +296,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const data = encodeURIComponent(JSON.stringify(workbookData));
 
         // URL real de tu Apps Script
-        const appsScriptUrl = `https://script.google.com/macros/s/AKfycbzptwoUfX-aYYCuwyvhiayJBo9TUf41LDxTq-Hkg-4DVPIFeAH1Ux4N7oPQBA6uvZGdYw/exec?data=${data}`;
+        const appsScriptUrl = `https://script.google.com/macros/s/AKfycbygQ7PVVm-UL-xjeiDv_nkIchLpbE-YkFzuwcLAvQnIkpJDKRF1krFQu88uhXQ-ISOqcg/exec?data=${data}`;
 
         // CORS proxy
         const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(appsScriptUrl)}`;
